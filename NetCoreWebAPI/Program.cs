@@ -1,5 +1,5 @@
-
-using NetCoreWebAPI;
+using NetCoreWebAPI.Middleware;
+using NetCoreWebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +16,11 @@ builder.Services.AddCors(options =>
     });
 });
 
+//Step2 
+//builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
+
 builder.Services.AddControllers();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -24,6 +28,23 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Step3 
+
+//app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+
+#region Built in Exception Middleware example to handle the global exception
+//app.UseExceptionHandler(options =>
+//{
+//    options.Run(async (context) =>
+//    {
+//        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+//        context.Response.ContentType = Text.Plain;
+//        var exceptionHandlerPathFeature =
+//                context.Features.Get<IExceptionHandlerPathFeature>();
+//        await context.Response.WriteAsync("Error occured while proccessing the request");
+//    });
+//});
+#endregion
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -76,3 +97,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
+
+//https://tools.ietf.org/html/rfc7231#section-6.6.1
