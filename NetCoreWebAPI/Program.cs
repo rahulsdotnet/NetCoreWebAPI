@@ -17,20 +17,19 @@ builder.Services.AddCors(options =>
 });
 
 //Step2 
-//builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
+builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//builder.Services.AddTransient<CustomMiddleware>();
 
 var app = builder.Build();
 
 // Step3 
 
-//app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 #region Built in Exception Middleware example to handle the global exception
 //app.UseExceptionHandler(options =>
