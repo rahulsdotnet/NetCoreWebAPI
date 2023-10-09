@@ -1,4 +1,6 @@
 using NetCoreWebAPI.Middleware;
+using NetCoreWebAPI.Models;
+using NetCoreWebAPI.Options;
 using NetCoreWebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,9 +17,19 @@ builder.Services.AddCors(options =>
                .AllowAnyMethod();
     });
 });
-
+var services = builder.Services;
 //Step2 
 builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
+
+services.AddOptions<SmtpOptions>()
+    .BindConfiguration("Smtp") // Bind the smtp section in config
+    .ValidateDataAnnotations() //Enable the validation
+    .ValidateOnStart(); //Validate on app start
+
+services.AddOptions<GroupOptions>()
+    .BindConfiguration("Group") // Bind the smtp section in config
+    .ValidateDataAnnotations() //Enable the validation
+    .ValidateOnStart(); //Validate on app start
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
