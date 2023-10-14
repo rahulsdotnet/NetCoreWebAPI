@@ -1,3 +1,4 @@
+using LearnWebAPI.Services;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using NetCoreWebAPI;
@@ -11,6 +12,28 @@ var builder = WebApplication.CreateBuilder(args);
 var allowedOrigin = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 
 // Add services to the container.
+
+//1. Transient
+
+//builder.Services.AddTransient<ITeaService, TeaService>();
+//builder.Services.AddTransient<IRestaurantService, RestaurantService>();
+
+//2. Scope
+
+//builder.Services.AddScoped<ITeaService, TeaService>();
+//builder.Services.AddScoped<IRestaurantService, RestaurantService>();
+
+//3. Singleton
+
+builder.Services.AddSingleton<ITeaService, TeaService>();
+builder.Services.AddSingleton<IRestaurantService, RestaurantService>();
+
+
+
+
+
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("myAppCors", policy =>
@@ -20,6 +43,7 @@ builder.Services.AddCors(options =>
                .AllowAnyMethod();
     });
 });
+
 var services = builder.Services;
 //Step2 
 builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
