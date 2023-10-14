@@ -1,3 +1,6 @@
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using NetCoreWebAPI;
 using NetCoreWebAPI.Middleware;
 using NetCoreWebAPI.Models;
 using NetCoreWebAPI.Options;
@@ -21,9 +24,10 @@ var services = builder.Services;
 //Step2 
 builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
 
+services.TryAddSingleton<IValidateOptions<SmtpOptions>, SmtpConfigurationValidation>();
+
 services.AddOptions<SmtpOptions>()
-    .BindConfiguration("Smtp") // Bind the smtp section in config
-    .ValidateDataAnnotations() //Enable the validation
+    .BindConfiguration("Smtp") // Bind the smtp section in config    
     .ValidateOnStart(); //Validate on app start
 
 services.AddOptions<GroupOptions>()
